@@ -39,23 +39,23 @@ function getCategory(bmi) {
 function getAdvice(bmi) {
   if (bmi < 18.5) {
     return {
-      ex: "เน้นเวทเทรนนิ่ง 3–4 วัน/สัปดาห์",
-      diet: "เพิ่มพลังงาน 300–500 kcal/วัน เน้นโปรตีน เช่น ไข่ ถั่ว อกไก่"
+      ex: "เน้นเวทเทรนนิ่ง สร้างกล้ามเนื้อ",
+      diet: "เพิ่มโปรตีนและคาร์โบไฮเดรตคุณภาพดี"
     };
   } else if (bmi < 25) {
     return {
-      ex: "เวทเทรนนิ่ง + คาร์ดิโอ อย่างละ 2–3 วัน/สัปดาห์",
-      diet: "กินครบ 3 หมู่ ลดน้ำหวาน"
+      ex: "รักษาระดับกิจกรรม เวทเทรนนิ่งสลับคาร์ดิโอ",
+      diet: "ทานอาหารครบ 5 หมู่ ในปริมาณที่เหมาะสม"
     };
   } else if (bmi < 30) {
     return {
-      ex: "คาร์ดิโอ 30–40 นาที 4–5 วัน/สัปดาห์",
-      diet: "ลดของทอด เพิ่มผัก เน้นโปรตีนไขมันต่ำ"
+      ex: "เน้นคาร์ดิโอเผาผลาญไขมัน 30 นาที/วัน",
+      diet: "ลดของทอด ของหวาน เน้นผักผลไม้"
     };
   } else {
     return {
-      ex: "เดินเร็ว 20–30 นาทีทุกวัน, เวท 2–3 วัน",
-      diet: "ลดแคล 500–700 kcal/วัน ลดน้ำหวาน"
+      ex: "เริ่มจากการเดินเร็ว หรือว่ายน้ำเพื่อถนอมเข่า",
+      diet: "ควบคุมแคลอรี่อย่างเคร่งครัด ปรึกษาแพทย์"
     };
   }
 }
@@ -66,14 +66,15 @@ function renderHistory() {
 
   records.forEach((r) => {
     const tr = document.createElement("tr");
+    const cat = getCategory(r.bmi); // Recalculate style based on BMI
 
     tr.innerHTML = `
-      <td>${r.date}</td>
+      <td style="color: #86868b;">${new Date(r.date).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' })}</td>
       <td>${r.weightKg}</td>
       <td>${r.heightCm}</td>
-      <td>${r.bmi.toFixed(2)}</td>
-      <td class="${getCategory(r.bmi).className}">${r.category}</td>
-      <td><button onclick="deleteRecord('${r.id}')">ลบ</button></td>
+      <td style="font-weight: 600;">${r.bmi.toFixed(1)}</td>
+      <td><span style="font-size:12px; padding:4px 8px; border-radius:12px;" class="${cat.className}">${cat.label}</span></td>
+      <td><button onclick="deleteRecord('${r.id}')">✕</button></td>
     `;
 
     historyBody.appendChild(tr);
@@ -82,7 +83,8 @@ function renderHistory() {
   renderChart(records);
 }
 
-function deleteRecord(id) {
+// Attach deleteRecord to window so it works with inline onclick
+window.deleteRecord = function(id) {
   const records = loadRecords().filter((r) => r.id !== id);
   saveRecords(records);
   renderHistory();
@@ -92,7 +94,7 @@ function addRecord(weight, height, bmi, category) {
   const records = loadRecords();
   records.push({
     id: Date.now().toString(),
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toISOString(), // Save full ISO string for sorting
     weightKg: weight,
     heightCm: height,
     bmi,
@@ -113,8 +115,8 @@ calculateBtn.addEventListener("click", () => {
     return;
   }
 
-  if (height < 100 || height > 250 || weight < 20 || weight > 250) {
-    errorMsg.textContent = "ค่าส่วนสูง/น้ำหนักผิดปกติ";
+  if (height < 50 || height > 300 || weight < 20 || weight > 300) {
+    errorMsg.textContent = "ค่าที่ระบุไม่สมเหตุสมผล";
     return;
   }
 
@@ -122,42 +124,85 @@ calculateBtn.addEventListener("click", () => {
   const cat = getCategory(bmi);
   const adv = getAdvice(bmi);
 
-  bmiValueSpan.textContent = bmi.toFixed(2);
+  // Update Result Display
+  bmiValueSpan.textContent = bmi.toFixed(1); // Apple prefers clean numbers
   bmiCategorySpan.textContent = cat.label;
-  bmiCategorySpan.className = cat.className;
+  
+  // Reset class and add the new one
+  bmiCategorySpan.className = ""; 
+  bmiCategorySpan.classList.add(cat.className);
 
-  exAdvice.textContent = "🏋️ ออกกำลังกาย: " + adv.ex;
-  dietAdvice.textContent = "🍽️ อาหาร: " + adv.diet;
+  exAdvice.textContent = adv.ex;
+  dietAdvice.textContent = adv.diet;
 
   addRecord(weight, height, bmi, cat.label);
 });
 
 clearAllBtn.addEventListener("click", () => {
-  if (confirm("ล้างประวัติทั้งหมด?")) {
+  if (confirm("ต้องการล้างประวัติทั้งหมดใช่หรือไม่?")) {
     saveRecords([]);
     renderHistory();
   }
 });
 
 function renderChart(records) {
-  const ctx = document.getElementById("bmi-chart");
+  const ctx = document.getElementById("bmi-chart").getContext('2d');
+  
+  // Create Gradient
+  let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, 'rgba(0, 113, 227, 0.2)'); // Apple Blue Fade
+  gradient.addColorStop(1, 'rgba(0, 113, 227, 0.0)');
+
   const sorted = [...records].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   if (chartInstance) chartInstance.destroy();
 
+  // Chart Config: Minimalist Apple Style
   chartInstance = new Chart(ctx, {
     type: "line",
     data: {
-      labels: sorted.map((r) => r.date),
+      labels: sorted.map((r) => new Date(r.date).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' })),
       datasets: [
         {
           label: "BMI",
           data: sorted.map((r) => r.bmi),
-          borderWidth: 2
+          borderColor: "#0071E3",
+          backgroundColor: gradient,
+          borderWidth: 3,
+          pointRadius: 3,
+          pointBackgroundColor: "#FFFFFF",
+          pointBorderColor: "#0071E3",
+          pointBorderWidth: 2,
+          fill: true,
+          tension: 0.4 // Smooth curves
         }
       ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          padding: 12,
+          cornerRadius: 8,
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false }, // Hide X grid
+          ticks: { color: '#86868B', font: { size: 11 } }
+        },
+        y: {
+          grid: { borderDash: [5, 5], color: '#E5E5EA' }, // Dotted Y grid
+          ticks: { color: '#86868B', font: { size: 11 } },
+          beginAtZero: false
+        }
+      }
     }
   });
 }
 
+// Initial Render
 renderHistory();

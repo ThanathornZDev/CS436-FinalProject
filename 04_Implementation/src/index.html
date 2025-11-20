@@ -1,70 +1,102 @@
-
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>BMI Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Health</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>BMI Tracker</h1>
-    <p>ระบบคำนวณและติดตามดัชนีมวลกาย พร้อมคำแนะนำสุขภาพ</p>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Health.</h1>
+      <p>ติดตามสุขภาพและดัชนีมวลกายของคุณ</p>
+    </header>
 
-  <main>
-    <section class="card">
-      <h2>คำนวณ BMI</h2>
+    <main>
+      <div class="grid-layout">
+        <section class="card input-card">
+          <h2>ข้อมูลร่างกาย</h2>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <label>ส่วนสูง (cm)</label>
+              <input type="number" id="height" placeholder="170" />
+            </div>
+            <div class="input-wrapper">
+              <label>น้ำหนัก (kg)</label>
+              <input type="number" id="weight" placeholder="65" />
+            </div>
+          </div>
+          <button id="calculate-btn">คำนวณ BMI</button>
+          <p id="error-msg" class="error"></p>
+        </section>
 
-      <label>ส่วนสูง (cm)</label>
-      <input type="number" id="height" placeholder="170" />
-
-      <label>น้ำหนัก (kg)</label>
-      <input type="number" id="weight" placeholder="65" />
-
-      <button id="calculate-btn">คำนวณ BMI</button>
-
-      <p id="error-msg" class="error"></p>
-
-      <div id="result-box">
-        <p>ค่า BMI: <span id="bmi-value">-</span></p>
-        <p>สถานะ: <span id="bmi-category">-</span></p>
+        <section class="card result-card">
+          <h2>ผลลัพธ์ของคุณ</h2>
+          <div class="result-circle">
+            <span id="bmi-value">--.--</span>
+            <small>BMI</small>
+          </div>
+          <div class="status-badge">
+            <span id="bmi-category">รอผลการคำนวณ</span>
+          </div>
+        </section>
       </div>
-    </section>
 
-    <section class="card">
-      <h2>คำแนะนำสุขภาพ</h2>
-      <p id="exercise-advice">-</p>
-      <p id="diet-advice">-</p>
-    </section>
+      <section class="card advice-card">
+        <h2>คำแนะนำสุขภาพ</h2>
+        <div class="advice-item">
+          <div class="icon">🏃🏻</div>
+          <div class="content">
+            <h3>การออกกำลังกาย</h3>
+            <p id="exercise-advice">กรุณาคำนวณเพื่อดูคำแนะนำ</p>
+          </div>
+        </div>
+        <div class="advice-item">
+          <div class="icon">🥗</div>
+          <div class="content">
+            <h3>โภชนาการ</h3>
+            <p id="diet-advice">กรุณาคำนวณเพื่อดูคำแนะนำ</p>
+          </div>
+        </div>
+      </section>
 
-    <section class="card">
-      <h2>ประวัติการวัด</h2>
+      <section class="card chart-card">
+        <h2>แนวโน้มสุขภาพ</h2>
+        <div class="chart-container">
+          <canvas id="bmi-chart"></canvas>
+        </div>
+      </section>
 
-      <button id="clear-all-btn" class="danger">ล้างประวัติทั้งหมด</button>
-
-      <table>
-        <thead>
-          <tr>
-            <th>วันที่</th>
-            <th>น้ำหนัก</th>
-            <th>ส่วนสูง</th>
-            <th>BMI</th>
-            <th>สถานะ</th>
-            <th>ลบ</th>
-          </tr>
-        </thead>
-        <tbody id="history-body"></tbody>
-      </table>
-    </section>
-
-    <section class="card">
-      <h2>กราฟแนวโน้ม BMI</h2>
-      <canvas id="bmi-chart"></canvas>
-    </section>
-  </main>
+      <section class="card history-card">
+        <div class="card-header-row">
+          <h2>ประวัติล่าสุด</h2>
+          <button id="clear-all-btn" class="text-btn">ล้างประวัติ</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>วันที่</th>
+                <th>นน.</th>
+                <th>ส่วนสูง</th>
+                <th>BMI</th>
+                <th>สถานะ</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
