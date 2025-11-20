@@ -1,0 +1,6 @@
+- **HTML** – สร้างหน้าเว็บ
+- **CSS** – ออกแบบ UI
+- **JavaScript (Vanilla)** – Back-End ทั้งหมด
+- **LocalStorage** – เก็บประวัติ BMI
+- **Chart.js** – แสดงกราฟแนวโน้ม BMI
+- **Vercel** – ใช้ deploy
