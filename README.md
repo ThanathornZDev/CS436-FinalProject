@@ -1,2 +1,1 @@
-# CS436-FinalProject
-CS436 Software Engineer 
+Template By Thanathorn Kongmak
