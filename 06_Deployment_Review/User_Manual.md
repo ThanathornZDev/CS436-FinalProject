@@ -1,8 +1,7 @@
 # User Manual – BMI Tracker
 
-## 1. เปิดใช้งาน
-เปิดผ่าน GitHub Pages เช่น  
-https://username.github.io/bmi-tracker/
+## 1. เปิดใช้งาน 
+เปิดเว็บ : https://bmi-tracker-seven.vercel.app/
 
 ## 2. คำนวณ BMI
 1. กรอกส่วนสูง (cm)  
