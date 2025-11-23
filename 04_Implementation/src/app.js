@@ -115,7 +115,7 @@ calculateBtn.addEventListener("click", () => {
     return;
   }
 
-  if (height < 50 || height > 300 || weight < 20 || weight > 300) {
+  if (height < 50 || height > 220 || weight < 20 || weight > 300) {
     errorMsg.textContent = "ค่าที่ระบุไม่สมเหตุสมผล";
     return;
   }
