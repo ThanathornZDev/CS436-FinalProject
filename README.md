@@ -76,9 +76,15 @@ README.md
 ---
 
 ## 👨‍💻 Author
-**Thanathorn Kongmak 1670702941**  
-**Phensinee Theanpakdeepasart 1670707320**
-Bangkok University — CS436 Final Project
+**Bangkok University** — *CS436 Final Project*
+
+* **Thanathorn Kongmak**
+  * Student ID: 1670702941
+  * Role: [เช่น Lead Developer / Coding]
+
+* **Phensinee Theanpakdeepasart**
+  * Student ID: 1670707320
+  * Role: [เช่น Documentation / Testing / Design]
 
 ---
 
