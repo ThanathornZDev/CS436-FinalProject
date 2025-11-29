@@ -62,6 +62,8 @@ README.md
 5. ถ้าเป็น Vite ให้เลือก Preset → **Vite**  
 6. กด **Deploy**
 
+VDO LINK : https://www.youtube.com/watch?v=3KY5YG7HYuc
+
 ---
 
 ## 🎯 How to Use
